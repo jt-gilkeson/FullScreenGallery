@@ -15,7 +15,7 @@ Add the following dependency to your build.gradle file
 
 ### How to use it
 
-Add SimpleFragmentActivity to your AndroidManifest
+Add GalleryActivity to your AndroidManifest
 ```xml
   <activity android:name="com.jt.gallery.GalleryActivity"/>
 ```
