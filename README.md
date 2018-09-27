@@ -20,7 +20,7 @@ Add GalleryActivity to your AndroidManifest
 <activity android:name="com.jt.gallery.GalleryActivity"/>
 ```
 
-#### Basic Usage
+#### Usage
 To launch the gallery, simply use the newIntent method then start the activity.
 
 Kotlin:
