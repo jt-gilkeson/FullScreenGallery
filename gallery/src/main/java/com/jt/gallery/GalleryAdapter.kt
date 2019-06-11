@@ -15,8 +15,10 @@ import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.view_image_gallery.view.*
 import uk.co.senab.photoview.PhotoViewAttacher
 
-class GalleryAdapter(private val view: FullScreenView,
-                     private val images: ArrayList<String>) : PagerAdapter() {
+class GalleryAdapter(
+    private val view: FullScreenView,
+    private val images: ArrayList<String>
+) : PagerAdapter() {
     private val views: SparseArray<View> = SparseArray()
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -30,21 +32,25 @@ class GalleryAdapter(private val view: FullScreenView,
         Glide.with(rootView.context)
             .load(image)
             .listener(object : RequestListener<Drawable> {
-                override fun onResourceReady(resource: Drawable?,
-                                             model: Any?,
-                                             target: Target<Drawable>?,
-                                             dataSource: DataSource?,
-                                             isFirstResource: Boolean): Boolean {
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
                     val photoView = PhotoViewAttacher(rootView.galleryImage)
                     photoView.onViewTapListener = tapListener
                     photoView.scaleType = ImageView.ScaleType.FIT_CENTER
                     return false
                 }
 
-                override fun onLoadFailed(e: GlideException?,
-                                          model: Any?,
-                                          target: Target<Drawable>?,
-                                          isFirstResource: Boolean) = false
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ) = false
             })
             .into(rootView.galleryImage)
 
