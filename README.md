@@ -9,7 +9,7 @@ repositories {
 }
 	
 dependencies {
-    compile 'com.github.jt-gilkeson:fullscreengallery:0.1'
+    implementation 'com.github.jt-gilkeson:fullscreengallery:0.2'
 }
 ```
 
@@ -54,3 +54,10 @@ startActivity(
     )
 );
 ```
+
+#### Optional Parameters
+When you call newIntent, you can optionally specify:
+
+**currentImage**: initial image to display (index for imageList)
+
+**useFullBrightness**: Set screen brightness to full (useful for displaying barcodes)
