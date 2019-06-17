@@ -11,20 +11,23 @@ import kotlin.collections.ArrayList
 
 private const val PAGER_OFFSCREEN_LIMIT = 10
 
-private const val IMAGE_LIST = "imageList"
 private const val POSITION = "position"
 private const val FULL_BRIGHTNESS = "fullBrightness"
+private const val ALLOW_DELETE = "allowDelete"
 
 class GalleryActivity : AppCompatActivity(), FullScreenView {
 
     companion object {
+        const val IMAGE_LIST = "imageList"
+
         @JvmStatic
         @JvmOverloads
-        fun newIntent(context: Context, imageList: List<String>, currentImage: Int = 0, useFullBrightness: Boolean = false) =
+        fun newIntent(context: Context, imageList: List<String>, currentImage: Int = 0, useFullBrightness: Boolean = false, allowDelete: Boolean = false) =
             Intent(context, GalleryActivity::class.java).apply {
                 putExtra(IMAGE_LIST, ArrayList(imageList))
                 putExtra(POSITION, currentImage)
                 putExtra(FULL_BRIGHTNESS, useFullBrightness)
+                putExtra(ALLOW_DELETE, allowDelete)
             }
     }
 
@@ -37,19 +40,18 @@ class GalleryActivity : AppCompatActivity(), FullScreenView {
         setContentView(R.layout.activity_gallery)
 
         val currentImage: Int
-        val adjustBrightness: Boolean
+        val adjustBrightness = intent.getBooleanExtra(FULL_BRIGHTNESS, false)
+        val allowDelete = intent.getBooleanExtra(ALLOW_DELETE, false)
 
         if (savedInstanceState != null) {
             imageList = savedInstanceState.getStringArrayList(IMAGE_LIST) ?: arrayListOf()
             currentImage = savedInstanceState.getInt(POSITION)
-            adjustBrightness = intent.getBooleanExtra(FULL_BRIGHTNESS, false)
         } else {
             imageList = intent.getStringArrayListExtra(IMAGE_LIST)
             currentImage = intent.getIntExtra(POSITION, 0)
-            adjustBrightness = intent.getBooleanExtra(FULL_BRIGHTNESS, false)
         }
 
-        val galleryAdapter = GalleryAdapter(this, imageList)
+        val galleryAdapter = GalleryAdapter(this, imageList, allowDelete)
 
         galleryViewPager.apply {
             offscreenPageLimit = PAGER_OFFSCREEN_LIMIT
@@ -94,6 +96,17 @@ class GalleryActivity : AppCompatActivity(), FullScreenView {
 
     override fun isNavigationVisible(): Boolean =
         window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0
+
+    override fun resetAdapter(index: Int) {
+        // Need to reset the adapter to update it
+        galleryViewPager.adapter = GalleryAdapter(this, imageList, true)
+        galleryViewPager.currentItem = index
+    }
+
+    override fun onBackPressed() {
+        setResult(RESULT_OK, Intent().putStringArrayListExtra(IMAGE_LIST, imageList))
+        super.onBackPressed()
+    }
 
     private fun setScreenBrightnessTo(brightness: Float) {
         val lp = window.attributes

@@ -2,6 +2,7 @@ package com.jt.gallery
 
 import android.graphics.drawable.Drawable
 import android.support.v4.view.PagerAdapter
+import android.support.v7.app.AlertDialog
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,8 @@ import uk.co.senab.photoview.PhotoViewAttacher
 
 class GalleryAdapter(
     private val view: FullScreenView,
-    private val images: ArrayList<String>
+    private val images: ArrayList<String>,
+    private val allowDelete: Boolean = false
 ) : PagerAdapter() {
     private val views: SparseArray<View> = SparseArray()
 
@@ -42,6 +44,23 @@ class GalleryAdapter(
                     val photoView = PhotoViewAttacher(rootView.galleryImage)
                     photoView.onViewTapListener = tapListener
                     photoView.scaleType = ImageView.ScaleType.FIT_CENTER
+
+                    if (allowDelete) {
+                        photoView.setOnLongClickListener {
+                            AlertDialog.Builder(it.context)
+                                .setMessage(R.string.delete_message)
+                                .setPositiveButton(R.string.delete) { dialog, _ ->
+                                    deleteItem(position)
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss() }
+                                .create()
+                                .show()
+
+                            true
+                        }
+                    }
+
                     return false
                 }
 
@@ -66,6 +85,14 @@ class GalleryAdapter(
     override fun isViewFromObject(view: View, obj: Any) = (view == obj)
 
     override fun getCount() = images.size
+
+    private fun deleteItem(position: Int) {
+        images.removeAt(position)
+        views.remove(position)
+        notifyDataSetChanged()
+
+        view.resetAdapter(if (position > images.size - 1) images.size - 1 else position)
+    }
 
     private val tapListener = PhotoViewAttacher.OnViewTapListener { _, _, _ ->
         if (view.isNavigationVisible()) {
