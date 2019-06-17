@@ -88,7 +88,7 @@ class GalleryAdapter(
 
     // This is called when notifyDataSetChanged() is called
     override fun getItemPosition(any: Any): Int {
-        // refresh all fragments when data set changed
+        // refresh all views when data set changed
         return POSITION_NONE
     }
 
