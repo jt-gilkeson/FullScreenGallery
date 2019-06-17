@@ -97,12 +97,6 @@ class GalleryActivity : AppCompatActivity(), FullScreenView {
     override fun isNavigationVisible(): Boolean =
         window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION == 0
 
-    override fun resetAdapter(index: Int) {
-        // Need to reset the adapter to update it
-        galleryViewPager.adapter = GalleryAdapter(this, imageList, true)
-        galleryViewPager.currentItem = index
-    }
-
     override fun onBackPressed() {
         setResult(RESULT_OK, Intent().putStringArrayListExtra(IMAGE_LIST, imageList))
         super.onBackPressed()

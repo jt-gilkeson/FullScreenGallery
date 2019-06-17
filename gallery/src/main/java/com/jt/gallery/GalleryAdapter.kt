@@ -86,12 +86,16 @@ class GalleryAdapter(
 
     override fun getCount() = images.size
 
+    // This is called when notifyDataSetChanged() is called
+    override fun getItemPosition(any: Any): Int {
+        // refresh all fragments when data set changed
+        return POSITION_NONE
+    }
+
     private fun deleteItem(position: Int) {
         images.removeAt(position)
         views.remove(position)
         notifyDataSetChanged()
-
-        view.resetAdapter(if (position > images.size - 1) images.size - 1 else position)
     }
 
     private val tapListener = PhotoViewAttacher.OnViewTapListener { _, _, _ ->
