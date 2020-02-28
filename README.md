@@ -63,3 +63,7 @@ When you call newIntent, you can optionally specify:
 **useFullBrightness**: Set screen brightness to full (useful for displaying barcodes)
 
 **allowDelete**: Allows user to long press to delete image.  To use this feature you should `startActivityForResult`, and to get the updated list you can call `getStringArrayListExtra(GalleryActivity.IMAGE_LIST)` for the intent returned in `onActivityResult`.
+
+### Known apps using this library
+* [Harbor Freight Tools Coupon Database (HFQPDB)] (https://www.hfqpdb.com/android-app/install.html)
+
